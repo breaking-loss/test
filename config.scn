@@ -1,0 +1,67 @@
+(use-modules (gnu)
+             (nongnu packages linux)
+             (nongnu system linux-initrd))
+
+(use-service-modules desktop networking ssh)
+(use-package-modules wm xorg fonts)
+
+(operating-system
+  (kernel linux)
+  (initrd microcode-initrd)
+  (firmware (list linux-firmware))
+
+  (host-name "thinkpad")
+  (timezone "Asia/Kolkata")
+  (locale "en_US.utf8")
+
+  (keyboard-layout (keyboard-layout "us"))
+
+  (bootloader
+   (bootloader-configuration
+    (bootloader grub-efi-bootloader)
+    (targets '("/boot/efi"))
+    (keyboard-layout keyboard-layout)))
+
+  (file-systems
+   (cons* (file-system
+            (mount-point "/")
+            (device (uuid "99761b50-b2f0-4e49-88a4-1539f4b72f58" 'btrfs))
+            (type "btrfs")
+            (options "compress=zstd,subvol=@"))
+          (file-system
+            (mount-point "/home")
+            (device (uuid "99761b50-b2f0-4e49-88a4-1539f4b72f58" 'btrfs))
+            (type "btrfs")
+            (options "compress=zstd,subvol=@home"))
+          (file-system
+            (mount-point "/boot/efi")
+            (device (uuid "B160-FD24" 'fat))
+            (type "vfat"))
+          %base-file-systems))
+
+  (users (cons* (user-account
+                 (name "abram")
+                 (group "users")
+                 (supplementary-groups
+                  '("wheel" "video" "audio" "input" "netdev" "seat"))
+                 (home-directory "/home/abram"))
+                %base-user-accounts))
+
+  (packages
+   (append
+    (list hyprland
+          xdg-desktop-portal-hyprland
+          pipewire
+          wireplumber
+          waybar
+          foot
+          nss-certs
+          font-dejavu)
+    %base-packages))
+
+  (services
+   (append
+    (list (service network-manager-service-type)
+          (service wpa-supplicant-service-type)
+          (service seatd-service-type))
+    %base-services)))
