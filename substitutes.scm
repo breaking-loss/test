@@ -6,7 +6,7 @@
            (plain-file "guix-moe.pub"
              "(public-key (ecc (curve Ed25519) (q #552F670D5005D7EB6ACF05284A1066E52156B51D75DE3EBD3030CD046675D543#)))")
            (plain-file "nonguix.pub"
-             "(public-key (ecc (curve Ed25519) (q #PASTE-Q-VALUE-HERE#)))")))
+             "(public-key (ecc (curve Ed25519) (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)))"))) 
     (substitute-urls
      '("https://substitutes.nonguix.org"
        "https://cache-sg.guix.moe"
